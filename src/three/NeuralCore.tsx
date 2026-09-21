@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { pointer, damp } from "@/lib/pointer";
+import { pointer, damp, scroll01, smoothstep, zones } from "@/lib/pointer";
 
 /**
  * The hero centerpiece: a neural-core made of a wireframe icosahedron shell,
@@ -52,6 +52,12 @@ export function NeuralCore({ position = [0, 0.2, 0] as [number, number, number] 
     const g = group.current;
     if (!g) return;
 
+    // The core belongs to the hero/about story — fade it out as the skills
+    // zone approaches so its wireframe never fights with the skill cards.
+    const vis = 1 - smoothstep(zones.skills[0] - 0.04, zones.skills[0] + 0.05, scroll01.v);
+    g.visible = vis > 0.02;
+    g.scale.setScalar(damp(g.scale.x, 0.6 + vis * 0.4, 3, d));
+
     // Lean toward cursor + slow idle sway
     g.rotation.y = damp(g.rotation.y, pointer.x * 0.35 + Math.sin(t * 0.12) * 0.08, 2.5, d);
     g.rotation.x = damp(g.rotation.x, -pointer.y * 0.2 + Math.cos(t * 0.1) * 0.05, 2.5, d);
@@ -61,16 +67,26 @@ export function NeuralCore({ position = [0, 0.2, 0] as [number, number, number] 
     if (nucleus.current && nucleusMat.current) {
       const breathe = 1 + Math.sin(t * 1.4) * 0.06;
       const s = breathe + pulse.current * 0.5;
-      nucleus.current.scale.setScalar(s);
-      nucleusMat.current.opacity = 0.75 + Math.sin(t * 1.4) * 0.1 + pulse.current * 0.25;
+      nucleus.current.scale.setScalar(s * (0.6 + vis * 0.4));
+      nucleusMat.current.opacity = (0.75 + Math.sin(t * 1.4) * 0.1 + pulse.current * 0.25) * vis;
     }
     pulse.current = Math.max(0, pulse.current - d * 1.6);
 
     if (ring.current) ring.current.rotation.z = t * 0.35;
     if (ring2.current) ring2.current.rotation.z = -t * 0.22;
     if (shellMat.current) {
-      shellMat.current.opacity = hovered ? 0.5 : 0.22;
+      shellMat.current.opacity = (hovered ? 0.5 : 0.22) * vis;
     }
+
+    // Fade every remaining material (links, data rings, nodes) with the same
+    // visibility factor so the whole core dissolves together.
+    g.traverse((o) => {
+      const mat = (o as THREE.Mesh).material as THREE.MeshBasicMaterial | undefined;
+      if (!mat || mat === shellMat.current || mat === nucleusMat.current || !("opacity" in mat)) return;
+      const ud = mat.userData as { baseOpacity?: number };
+      if (ud.baseOpacity === undefined) ud.baseOpacity = mat.opacity;
+      mat.opacity = ud.baseOpacity * vis;
+    });
   });
 
   return (
@@ -106,7 +122,7 @@ export function NeuralCore({ position = [0, 0.2, 0] as [number, number, number] 
         <Node key={i} base={p} index={i} pulse={pulse} />
       ))}
 
-      {/* Faint synapse links */}
+      {/* Faint synapse links (fades with the core via group visibility) */}
       <lineSegments>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[links, 3]} />
@@ -157,7 +173,7 @@ function Node({
   return (
     <mesh ref={ref} position={base}>
       <sphereGeometry args={[0.055, 12, 12]} />
-      <meshBasicMaterial color={index % 3 === 0 ? "#d98e5f" : "#f5b944"} />
+      <meshBasicMaterial color={index % 3 === 0 ? "#d98e5f" : "#f5b944"} transparent opacity={1} />
     </mesh>
   );
 }

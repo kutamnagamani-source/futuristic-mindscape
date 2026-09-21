@@ -22,7 +22,7 @@ export function Skills() {
             viewport={{ once: true, margin: "-8% 0px" }}
             transition={{ duration: 0.6, delay: (i % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
             data-cursor="view"
-            className="pf-glass pointer-events-auto group relative overflow-hidden rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1.5"
+            className="pf-card pointer-events-auto group relative overflow-hidden rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1.5 hover:border-amber-300/30"
             style={{ ["--accent" as string]: g.accent }}
           >
             {/* hover glow tinted by the category accent */}
@@ -35,7 +35,7 @@ export function Skills() {
               <p className="font-mono-ui text-[11px] tracking-[0.28em] uppercase" style={{ color: g.accent }}>
                 {g.label}
               </p>
-              <p className="font-mono-ui text-[10px] text-white/40">0{i + 1}</p>
+              <p className="font-mono-ui text-[10px] text-white/55">0{i + 1}</p>
             </header>
 
             <ul className="mt-5 flex flex-wrap gap-2">

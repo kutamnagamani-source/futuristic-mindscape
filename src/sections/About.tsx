@@ -62,7 +62,7 @@ export function About() {
           whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
           viewport={{ once: true, margin: "-10% 0px" }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="pf-noise pf-glass relative self-start overflow-hidden rounded-3xl p-6 sm:p-7 [transform-style:preserve-3d]"
+          className="pf-noise pf-card relative self-start overflow-hidden rounded-3xl p-6 sm:p-7 [transform-style:preserve-3d]"
         >
           {/* luminous top edge */}
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300/80 to-transparent" />

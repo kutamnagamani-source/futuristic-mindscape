@@ -1,16 +1,16 @@
 {
-  "name": "freebuff.com application",
-  "short_name": "freebuff.com",
-  "description": "freebuff.com application",
+  "name": "K. Vijay Phanindra — AI/ML Student",
+  "short_name": "KV · Portfolio",
+  "description": "Interactive 3D portfolio of K. Vijay Phanindra, AI/ML student at NIAT.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#0b0a08",
+  "theme_color": "#0b0a08",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/logo.svg",
       "sizes": "any",
-      "type": "image/png",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ]
