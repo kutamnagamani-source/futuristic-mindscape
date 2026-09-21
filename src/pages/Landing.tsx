@@ -1,9 +1,9 @@
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { CustomCursor } from "@/components/CustomCursor";
-import { LazyExperience } from "@/components/three-lazy";
+import { Scene3D } from "@/components/Scene3D";
 import { Hero } from "@/sections/Hero";
 import { About } from "@/sections/About";
 import { Skills } from "@/sections/Skills";
@@ -11,10 +11,6 @@ import { Contact } from "@/sections/Contact";
 import { Footer } from "@/sections/Footer";
 import { bindGlobalListeners, measureZones } from "@/lib/pointer";
 
-// Lazy 3D world — loads after first paint, keeps three.js out of the critical path
-const ExperienceFallback = (
-  <div className="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_42%,rgba(34,211,238,0.07),transparent_70%)]" />
-);
 
 export default function Landing() {
   const [booted, setBooted] = useState(false);
@@ -41,10 +37,8 @@ export default function Landing() {
         aria-hidden="true"
       />
 
-      {/* The 3D world — mounted behind everything */}
-      <Suspense fallback={ExperienceFallback}>
-        <LazyExperience />
-      </Suspense>
+      {/* The 3D world — mounted behind everything, self-healing if WebGL fails */}
+      <Scene3D />
 
       {/* Vignette + noise layers above the canvas, below content */}
       <div className="pointer-events-none fixed inset-0 z-[1] bg-[radial-gradient(ellipse_90%_70%_at_50%_40%,transparent_55%,rgba(5,5,7,0.75)_100%)]" aria-hidden="true" />

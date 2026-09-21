@@ -16,19 +16,37 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
     const duration = reduced ? 250 : 1400;
     const start = performance.now();
     let raf = 0;
+    let doneTimer: ReturnType<typeof setTimeout> | undefined;
+    let finished = false;
+
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      setProgress(1);
+      doneTimer = setTimeout(() => {
+        setGone(true);
+        onDone?.();
+      }, 250);
+    };
+
     const tick = (now: number) => {
+      if (finished) return;
       const p = Math.min(1, (now - start) / duration);
       setProgress(p);
       if (p < 1) raf = requestAnimationFrame(tick);
-      else {
-        setTimeout(() => {
-          setGone(true);
-          onDone?.();
-        }, 250);
-      }
+      else finish();
     };
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+
+    // Hard fallback: if RAF is throttled/blocked (background tab, sandboxed
+    // iframe), still reveal the site after the expected duration.
+    const fallbackTimer = setTimeout(finish, duration + 400);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(fallbackTimer);
+      if (doneTimer) clearTimeout(doneTimer);
+    };
   }, [onDone]);
 
   return (
