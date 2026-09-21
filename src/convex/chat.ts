@@ -6,7 +6,9 @@ import { internal } from "./_generated/api";
  * Portfolio chatbot backend.
  * - Strictly portfolio-scoped: the system prompt locks the bot to K. Vijay
  *   Phanindra's portfolio topics and instructs refusal + redirect otherwise.
- * - OPENAI_API_KEY is read server-side only (Keys tab) — never shipped to the client.
+ * - Provider priority: Gemini (GOOGLE_API_KEY, free tier) → OpenAI
+ *   (OPENAI_API_KEY) → built-in keyword fallback. Keys live server-side only
+ *   (Keys tab / convex env) — never shipped to the client.
  * - Light logging to the `chats` table for abuse monitoring.
  */
 
@@ -48,34 +50,81 @@ export const ask = action({
     }
 
     // ── LLM call (server-side key only) ───────────────────────────────────
-    if (!process.env.OPENAI_API_KEY) {
-      // Still portfolio-useful without a key: keyword fallback answers.
-      return { answer: fallbackAnswer(q), logged: false };
+    if (process.env.GOOGLE_API_KEY) {
+      const answer = await askGemini(q);
+      if (answer) {
+        await ctx.runMutation(internal.chat.log, { question: q, answer, createdAt: Date.now() });
+        return { answer, logged: true };
+      }
+      // Gemini failed — fall through to OpenAI, then keyword fallback.
     }
 
-    try {
-      const { default: OpenAI } = await import("openai");
-      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-      const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        max_tokens: 250,
-        temperature: 0.6,
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: q },
-        ],
-      });
-      const answer = completion.choices[0]?.message?.content?.trim();
-      if (!answer) throw new Error("empty");
-
-      await ctx.runMutation(internal.chat.log, { question: q, answer, createdAt: Date.now() });
-      return { answer, logged: true };
-    } catch (err) {
-      console.warn("Chat LLM call failed, using fallback:", err);
-      return { answer: fallbackAnswer(q), logged: false };
+    if (process.env.OPENAI_API_KEY) {
+      const answer = await askOpenAI(q);
+      if (answer) {
+        await ctx.runMutation(internal.chat.log, { question: q, answer, createdAt: Date.now() });
+        return { answer, logged: true };
+      }
     }
+
+    // No key configured or both providers failed: keyword fallback answers.
+    return { answer: fallbackAnswer(q), logged: false };
   },
 });
+
+/** Gemini via REST API (no SDK needed). Returns null on any failure. */
+async function askGemini(q: string): Promise<string | null> {
+  try {
+    const res = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": process.env.GOOGLE_API_KEY ?? "",
+        },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          contents: [{ role: "user", parts: [{ text: q }] }],
+          generationConfig: { temperature: 0.6, maxOutputTokens: 250 },
+        }),
+        signal: AbortSignal.timeout(20_000),
+      },
+    );
+    if (!res.ok) {
+      console.warn("Gemini error:", res.status, (await res.text()).slice(0, 300));
+      return null;
+    }
+    const data = (await res.json()) as {
+      candidates?: { content?: { parts?: { text?: string }[] } }[];
+    };
+    return data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("").trim() || null;
+  } catch (err) {
+    console.warn("Gemini call failed:", err);
+    return null;
+  }
+}
+
+/** OpenAI via official SDK. Returns null on any failure. */
+async function askOpenAI(q: string): Promise<string | null> {
+  try {
+    const { default: OpenAI } = await import("openai");
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      max_tokens: 250,
+      temperature: 0.6,
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: q },
+      ],
+    });
+    return completion.choices[0]?.message?.content?.trim() || null;
+  } catch (err) {
+    console.warn("OpenAI call failed:", err);
+    return null;
+  }
+}
 
 export const countRecent = internalQuery({
   args: { since: v.number() },
