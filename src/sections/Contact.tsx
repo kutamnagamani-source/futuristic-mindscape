@@ -42,7 +42,7 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="pointer-events-none relative mx-auto max-w-6xl px-6 py-28 sm:py-36">
+    <section id="contact" className="pointer-events-auto relative mx-auto max-w-6xl px-6 py-28 sm:py-36">
       <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
         <div>
           <motion.p
@@ -81,7 +81,7 @@ export function Contact() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="pointer-events-auto mt-9 flex flex-wrap gap-2.5"
+            className="mt-9 flex flex-wrap gap-2.5"
           >
             {socials.map((s) => (
               <li key={s.id}>
@@ -106,7 +106,7 @@ export function Contact() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="font-mono-ui pointer-events-auto mt-8 text-[11px] tracking-[0.2em] text-white/40"
+            className="font-mono-ui mt-8 text-[11px] tracking-[0.2em] text-white/40"
           >
             {profile.email} · {profile.location}
           </motion.p>
@@ -120,7 +120,7 @@ export function Contact() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           onSubmit={handleSubmit}
           noValidate
-          className="pf-noise pf-glass pointer-events-auto relative overflow-hidden rounded-3xl p-6 sm:p-8"
+          className="pf-noise pf-glass relative overflow-hidden rounded-3xl p-6 sm:p-8"
         >
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/60 to-transparent" />
 

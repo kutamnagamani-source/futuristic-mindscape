@@ -37,7 +37,7 @@ export default function Experience() {
           <directionalLight position={[6, 8, 4]} intensity={1.4} color="#cfe9ff" />
           <directionalLight position={[-6, -4, -6]} intensity={0.5} color="#a78bfa" />
 
-          <Particles count={particleCount} />
+          <Particles count={particleCount} reduced={reduced} />
           <Shards count={shardCount} />
           {!reduced && <NeuralCore position={[0, 0.2, 0]} />}
           {!reduced && <SkillRings isMobile={isMobile} />}

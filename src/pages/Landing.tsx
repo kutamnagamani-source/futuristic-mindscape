@@ -9,7 +9,7 @@ import { About } from "@/sections/About";
 import { Skills } from "@/sections/Skills";
 import { Contact } from "@/sections/Contact";
 import { Footer } from "@/sections/Footer";
-import { bindGlobalListeners } from "@/lib/pointer";
+import { bindGlobalListeners, measureZones } from "@/lib/pointer";
 
 // Lazy 3D world — loads after first paint, keeps three.js out of the critical path
 const ExperienceFallback = (
@@ -22,6 +22,11 @@ export default function Landing() {
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 28, mass: 0.4 });
 
   useEffect(() => bindGlobalListeners(), []);
+
+  // Re-measure 3D zone windows once real content is mounted
+  useEffect(() => {
+    if (booted) measureZones();
+  }, [booted]);
 
   return (
     <>
@@ -44,25 +49,30 @@ export default function Landing() {
       {/* Vignette + noise layers above the canvas, below content */}
       <div className="pointer-events-none fixed inset-0 z-[1] bg-[radial-gradient(ellipse_90%_70%_at_50%_40%,transparent_55%,rgba(5,5,7,0.75)_100%)]" aria-hidden="true" />
 
-      <Navbar />
+      {/* Content mounts after the loader so entrance animations play post-reveal */}
+      {booted && (
+        <>
+          <Navbar />
 
-      {/* Animated separately from the navbar: a filter/transform on this
-          wrapper would create a containing block and break the fixed navbar. */}
-      <motion.div
-        initial={{ opacity: 0, filter: "blur(6px)" }}
-        animate={booted ? { opacity: 1, filter: "blur(0px)" } : undefined}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none relative z-10"
-      >
-        <main className="pointer-events-none">
-          <Hero />
-          <About />
-          <Skills />
-          <Contact />
-        </main>
+          {/* Animated separately from the navbar: a filter/transform on this
+              wrapper would create a containing block and break the fixed navbar. */}
+          <motion.div
+            initial={{ opacity: 0, filter: "blur(6px)" }}
+            animate={{ opacity: 1, filter: "blur(0px)" }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            className="pointer-events-none relative z-10"
+          >
+            <main className="pointer-events-none">
+              <Hero />
+              <About />
+              <Skills />
+              <Contact />
+            </main>
 
-        <Footer />
-      </motion.div>
+            <Footer />
+          </motion.div>
+        </>
+      )}
     </>
   );
 }

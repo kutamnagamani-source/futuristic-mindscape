@@ -14,6 +14,10 @@ export function SkillRings({ isMobile }: { isMobile: boolean }) {
   const group = useRef<THREE.Group>(null);
   const center = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState<string | null>(null);
+  // drei <Html> ignores Three's `visible`, so rings (and their DOM labels)
+  // unmount entirely when outside the skills zone.
+  const [active, setActive] = useState(false);
+  const activeRef = useRef(false);
 
   // Skills zone from measured layout: fade in as the section arrives, out as it leaves
   useFrame((state, dt) => {
@@ -24,6 +28,11 @@ export function SkillRings({ isMobile }: { isMobile: boolean }) {
     const vis = smoothstep(zones.skills[0] - 0.08, zones.skills[0] + 0.06, t) *
       (1 - smoothstep(zones.skills[1], zones.skills[1] + 0.1, t));
     g.visible = vis > 0.01;
+    const nowActive = vis > 0.01;
+    if (nowActive !== activeRef.current) {
+      activeRef.current = nowActive;
+      setActive(nowActive);
+    }
     g.scale.setScalar(damp(g.scale.x, vis, 3, d));
     g.position.y = damp(g.position.y, 1.2 + (1 - vis) * 2.5, 3, d);
     g.rotation.y = damp(g.rotation.y, pointer.x * 0.22 + t * 1.2, 2, d);
@@ -44,19 +53,20 @@ export function SkillRings({ isMobile }: { isMobile: boolean }) {
         <meshBasicMaterial color="#a78bfa" transparent opacity={0.3} wireframe />
       </mesh>
 
-      {skillGroups.map((g, i) => (
-        <SkillRing
-          key={g.id}
-          index={i}
-          total={skillGroups.length}
-          label={g.label}
-          accent={g.accent}
-          skills={g.skills}
-          isMobile={isMobile}
-          hovered={hovered === g.id}
-          onHover={(h) => setHovered(h ? g.id : null)}
-        />
-      ))}
+      {active &&
+        skillGroups.map((g, i) => (
+          <SkillRing
+            key={g.id}
+            index={i}
+            total={skillGroups.length}
+            label={g.label}
+            accent={g.accent}
+            skills={g.skills}
+            isMobile={isMobile}
+            hovered={hovered === g.id}
+            onHover={(h) => setHovered(h ? g.id : null)}
+          />
+        ))}
     </group>
   );
 }

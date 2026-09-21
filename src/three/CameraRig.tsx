@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { pointer, scroll01, damp, smoothstep } from "@/lib/pointer";
+import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 
 /** Scroll-driven camera path waypoints (position, lookAt, fov). */
 const WAYPOINTS: { pos: [number, number, number]; look: [number, number, number]; fov: number }[] = [
@@ -12,6 +13,7 @@ const WAYPOINTS: { pos: [number, number, number]; look: [number, number, number]
 ];
 
 export function CameraRig() {
+  const reduced = usePrefersReducedMotion();
   const desired = useRef(new THREE.Vector3(...WAYPOINTS[0]!.pos));
   const desiredLook = useRef(new THREE.Vector3(...WAYPOINTS[0]!.look));
   const pos = useRef(new THREE.Vector3(...WAYPOINTS[0]!.pos));
@@ -43,12 +45,15 @@ export function CameraRig() {
       a.look[2] + (b.look[2] - a.look[2]) * s,
     );
 
-    // Mouse parallax — small, lerped offsets for a filmic feel
-    posV.x = damp(posV.x, desired.current.x + pointer.x * 0.45, 3, d);
-    posV.y = damp(posV.y, desired.current.y + pointer.y * 0.3, 3, d);
+    // Mouse parallax — small, lerped offsets for a filmic feel.
+    // Disabled entirely under prefers-reduced-motion.
+    const px = reduced ? 0 : pointer.x * 0.45;
+    const py = reduced ? 0 : pointer.y * 0.3;
+    posV.x = damp(posV.x, desired.current.x + px, 3, d);
+    posV.y = damp(posV.y, desired.current.y + py, 3, d);
     posV.z = damp(posV.z, desired.current.z, 3, d);
-    lookV.x = damp(lookV.x, desiredLook.current.x + pointer.x * 0.35, 4, d);
-    lookV.y = damp(lookV.y, desiredLook.current.y + pointer.y * 0.25, 4, d);
+    lookV.x = damp(lookV.x, desiredLook.current.x + (reduced ? 0 : pointer.x * 0.35), 4, d);
+    lookV.y = damp(lookV.y, desiredLook.current.y + (reduced ? 0 : pointer.y * 0.25), 4, d);
     lookV.z = damp(lookV.z, desiredLook.current.z, 4, d);
 
     state.camera.position.copy(posV);

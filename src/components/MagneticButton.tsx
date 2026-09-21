@@ -1,5 +1,6 @@
 import { useRef, type ReactNode, type MouseEvent } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -29,6 +30,7 @@ export function MagneticButton({
   disabled,
 }: Props) {
   const shellRef = useRef<HTMLDivElement>(null);
+  const reduced = usePrefersReducedMotion();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const sx = useSpring(x, { stiffness: 180, damping: 14, mass: 0.4 });
@@ -36,7 +38,7 @@ export function MagneticButton({
 
   const handleMove = (e: MouseEvent) => {
     const el = shellRef.current;
-    if (!el) return;
+    if (!el || reduced) return;
     const rect = el.getBoundingClientRect();
     const relX = e.clientX - (rect.left + rect.width / 2);
     const relY = e.clientY - (rect.top + rect.height / 2);

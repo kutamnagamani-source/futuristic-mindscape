@@ -10,7 +10,7 @@ import { mulberry32 } from "@/lib/rand";
  * with a seeded PRNG so it's deterministic (pure render, stable visuals).
  * Count scales down on mobile / reduced motion for performance.
  */
-export function Particles({ count }: { count: number }) {
+export function Particles({ count, reduced = false }: { count: number; reduced?: boolean }) {
   const points = useRef<THREE.Points>(null);
 
   const { positions, speeds } = useMemo(() => {
@@ -34,16 +34,18 @@ export function Particles({ count }: { count: number }) {
     const arr = attr.array as Float32Array;
     const t = state.clock.elapsedTime;
 
-    for (let i = 0; i < count; i++) {
-      arr[i * 3 + 1] = arr[i * 3 + 1]! + speeds[i]! * d * 0.35;
-      if (arr[i * 3 + 1]! > 8) arr[i * 3 + 1] = -8;
+    if (!reduced) {
+      for (let i = 0; i < count; i++) {
+        arr[i * 3 + 1] = arr[i * 3 + 1]! + speeds[i]! * d * 0.35;
+        if (arr[i * 3 + 1]! > 8) arr[i * 3 + 1] = -8;
+      }
+      attr.needsUpdate = true;
     }
-    attr.needsUpdate = true;
 
     // Sink the field as the camera travels; gentle sway with pointer
-    const targetY = -scroll01.v * 6 + Math.sin(t * 0.2) * 0.4;
+    const targetY = -scroll01.v * 6 + (reduced ? 0 : Math.sin(t * 0.2) * 0.4);
     p.position.y = damp(p.position.y, targetY, 2, d);
-    p.position.x = damp(p.position.x, pointer.x * -0.6, 2, d);
+    p.position.x = damp(p.position.x, reduced ? 0 : pointer.x * -0.6, 2, d);
   });
 
   return (

@@ -6,7 +6,7 @@ import { about, profile } from "@/data/portfolio";
 /** About: identity card + philosophy, revealed with scroll-triggered word animation. */
 export function About() {
   return (
-    <section id="about" className="pointer-events-none relative mx-auto max-w-6xl px-6 py-28 sm:py-36">
+    <section id="about" className="pointer-events-auto relative mx-auto max-w-6xl px-6 py-28 sm:py-36">
       <SectionHeading
         index="01"
         eyebrow="Who I am"
@@ -39,7 +39,6 @@ export function About() {
 
           {/* Interests */}
           <motion.div
-            style={{ pointerEvents: "auto" }}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -63,7 +62,7 @@ export function About() {
           whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
           viewport={{ once: true, margin: "-10% 0px" }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="pf-noise pf-glass pointer-events-auto relative self-start overflow-hidden rounded-3xl p-6 sm:p-7 [transform-style:preserve-3d]"
+          className="pf-noise pf-glass relative self-start overflow-hidden rounded-3xl p-6 sm:p-7 [transform-style:preserve-3d]"
         >
           {/* holographic top edge */}
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
