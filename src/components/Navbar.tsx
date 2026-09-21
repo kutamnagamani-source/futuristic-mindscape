@@ -71,7 +71,7 @@ export function Navbar() {
               <span className="pf-pulse-soft absolute inline-flex size-full rounded-full bg-cyan-400/60" />
               <span className="relative inline-flex size-2.5 rounded-full bg-cyan-300" />
             </span>
-            <span className="text-sm font-semibold tracking-[0.18em] text-white uppercase">
+            <span className="text-sm font-semibold tracking-[0.18em] text-white uppercase drop-shadow-[0_0_10px_rgba(103,232,249,0.35)]">
               {profile.name}
             </span>
           </a>
@@ -84,7 +84,7 @@ export function Navbar() {
                   data-cursor="link"
                   className={cn(
                     "relative rounded-full px-3.5 py-1.5 text-xs font-medium tracking-[0.14em] uppercase transition-colors duration-300",
-                    active === l.id ? "text-white" : "text-white/55 hover:text-white/90",
+                    active === l.id ? "text-white" : "text-white/70 hover:text-white",
                   )}
                 >
                   {active === l.id && (
@@ -146,7 +146,7 @@ export function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="font-mono-ui mt-12 text-[10px] tracking-[0.3em] text-white/35 uppercase"
+              className="font-mono-ui mt-12 text-[11px] tracking-[0.3em] text-white/60 uppercase"
             >
               {profile.availability}
             </motion.p>

@@ -32,17 +32,17 @@ export function Skills() {
             />
 
             <header className="flex items-center justify-between">
-              <p className="font-mono-ui text-[10px] tracking-[0.28em] uppercase" style={{ color: g.accent }}>
+              <p className="font-mono-ui text-[11px] tracking-[0.28em] uppercase" style={{ color: g.accent }}>
                 {g.label}
               </p>
-              <p className="font-mono-ui text-[10px] text-white/25">0{i + 1}</p>
+              <p className="font-mono-ui text-[10px] text-white/40">0{i + 1}</p>
             </header>
 
-            <ul className="mt-5 flex flex-wrap gap-1.5">
+            <ul className="mt-5 flex flex-wrap gap-2">
               {g.skills.map((s) => (
                 <li
                   key={s}
-                  className="rounded-lg border border-white/10 bg-white/[0.05] px-2.5 py-1 text-[11px] text-white/75 transition-all duration-300 group-hover:border-white/20 group-hover:text-white/90"
+                  className="rounded-lg border border-white/15 bg-white/[0.07] px-2.5 py-1.5 text-xs text-white/90 transition-all duration-300 group-hover:border-white/30 group-hover:text-white"
                 >
                   {s}
                 </li>

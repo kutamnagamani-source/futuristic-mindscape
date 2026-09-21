@@ -127,6 +127,11 @@
     background-color: #050507;
     font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: "ss01", "cv11";
+    font-weight: 400;
+    letter-spacing: 0.005em;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   button:not([disabled]),
   [role="button"]:not([disabled]) {
@@ -138,6 +143,18 @@
   :focus-visible {
     outline: 2px solid var(--pf-cyan);
     outline-offset: 3px;
+  }
+  /* Native cursor hidden ONLY while the custom cursor is active (desktop,
+     fine pointer, no reduced motion). Applied via html.pf-cursor-on. */
+  html.pf-cursor-on,
+  html.pf-cursor-on a,
+  html.pf-cursor-on button,
+  html.pf-cursor-on [role="button"],
+  html.pf-cursor-on input,
+  html.pf-cursor-on textarea,
+  html.pf-cursor-on label,
+  html.pf-cursor-on select {
+    cursor: none;
   }
   /* Slim, themed scrollbar */
   ::-webkit-scrollbar {
@@ -160,10 +177,11 @@
   }
   .font-mono-ui {
     font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-weight: 500;
   }
   .pf-glass {
-    background: linear-gradient(160deg, oklch(0.6 0.03 260 / 8%), oklch(0.5 0.03 260 / 3%));
-    border: 1px solid oklch(1 0 0 / 8%);
+    background: linear-gradient(160deg, oklch(0.6 0.03 260 / 10%), oklch(0.5 0.03 260 / 5%));
+    border: 1px solid oklch(1 0 0 / 12%);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
   }
@@ -195,6 +213,10 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+  }
+  /* Legibility helper: readable body copy on dark */
+  .pf-muted {
+    color: oklch(0.8 0.02 260);
   }
   .pf-hairline {
     background: linear-gradient(90deg, transparent, oklch(1 0 0 / 18%), transparent);
@@ -229,12 +251,39 @@
   .pf-pulse-soft {
     animation: pf-pulse-soft 2.4s ease-in-out infinite;
   }
+  /* Ambient aurora orbs — very slow drift, GPU-friendly transforms only */
+  @keyframes pf-drift-a {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(6vw, 4vh, 0) scale(1.12);
+    }
+  }
+  @keyframes pf-drift-b {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1.05);
+    }
+    50% {
+      transform: translate3d(-7vw, -5vh, 0) scale(0.95);
+    }
+  }
+  .pf-aurora-a {
+    animation: pf-drift-a 26s ease-in-out infinite;
+  }
+  .pf-aurora-b {
+    animation: pf-drift-b 32s ease-in-out infinite;
+  }
 }
 
 /* Respect reduced motion: kill marquees/pulses, JS handles the rest */
 @media (prefers-reduced-motion: reduce) {
   .pf-marquee,
-  .pf-pulse-soft {
+  .pf-pulse-soft,
+  .pf-aurora-a,
+  .pf-aurora-b {
     animation: none !important;
   }
   html {

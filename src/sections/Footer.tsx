@@ -11,7 +11,7 @@ export function Footer() {
           <span className="font-display text-sm font-bold text-cyan-200">{profile.initials}</span>
         </div>
 
-        <p className="font-mono-ui text-center text-[10px] tracking-[0.35em] text-white/40 uppercase">
+        <p className="font-mono-ui text-center text-[11px] tracking-[0.35em] text-white/60 uppercase">
           Designed &amp; built with code + creativity
         </p>
 
@@ -27,7 +27,7 @@ export function Footer() {
                 <a
                   href={href}
                   data-cursor="link"
-                  className="text-xs tracking-[0.18em] text-white/55 uppercase transition-colors hover:text-cyan-200"
+                  className="text-xs tracking-[0.18em] text-white/75 uppercase transition-colors hover:text-cyan-200"
                 >
                   {label}
                 </a>
@@ -53,7 +53,7 @@ export function Footer() {
           ))}
         </ul>
 
-        <p className="text-[11px] text-white/30">
+        <p className="text-xs text-white/50">
           © {new Date().getFullYear()} {profile.name} — All rights reserved.
         </p>
       </div>

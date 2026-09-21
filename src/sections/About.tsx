@@ -19,7 +19,7 @@ export function About() {
           <WordReveal
             as="blockquote"
             text={about.headline}
-            className="font-display text-xl leading-snug font-medium text-white/90 sm:text-2xl"
+            className="font-display text-2xl leading-snug font-semibold text-white sm:text-3xl"
           />
 
           <div className="mt-8 space-y-5">
@@ -30,7 +30,7 @@ export function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-8% 0px" }}
                 transition={{ duration: 0.6, delay: i * 0.08 }}
-                className="max-w-xl text-sm leading-relaxed text-white/60 sm:text-[15px]"
+                className="pf-muted max-w-xl text-[15px] leading-relaxed sm:text-base"
               >
                 {p}
               </motion.p>
@@ -48,7 +48,7 @@ export function About() {
             {about.interests.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] tracking-wide text-white/70 transition-colors duration-300 hover:border-cyan-300/40 hover:text-cyan-200"
+                className="rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-xs tracking-wide text-white/85 transition-colors duration-300 hover:border-cyan-300/40 hover:text-cyan-200"
               >
                 {tag}
               </span>
@@ -66,7 +66,7 @@ export function About() {
         >
           {/* holographic top edge */}
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
-          <div className="font-mono-ui flex items-center justify-between text-[10px] tracking-[0.25em] text-white/40 uppercase">
+          <div className="font-mono-ui flex items-center justify-between text-[10px] tracking-[0.25em] text-white/55 uppercase">
             <span>Identity // {profile.initials}-01</span>
             <span className="pf-pulse-soft text-emerald-300">● online</span>
           </div>
@@ -93,10 +93,10 @@ export function About() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.2 + i * 0.07 }}
-                className="flex items-center justify-between gap-4 border-b border-white/5 pb-3 last:border-0 last:pb-0"
+                className="flex items-center justify-between gap-4 border-b border-white/10 pb-3 last:border-0 last:pb-0"
               >
-                <dt className="font-mono-ui text-[10px] tracking-[0.2em] text-white/40 uppercase">{f.label}</dt>
-                <dd className="text-right text-xs font-medium text-white/85">{f.value}</dd>
+                <dt className="font-mono-ui text-[10px] tracking-[0.2em] text-white/55 uppercase">{f.label}</dt>
+                <dd className="text-right text-[13px] font-medium text-white">{f.value}</dd>
               </motion.div>
             ))}
           </dl>

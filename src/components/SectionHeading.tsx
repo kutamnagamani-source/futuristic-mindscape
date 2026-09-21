@@ -25,15 +25,15 @@ export function SectionHeading({
         transition={{ duration: 0.5 }}
         className={cn("flex items-center gap-3", align === "center" && "justify-center")}
       >
-        <span className="font-mono-ui text-[11px] tracking-[0.3em] text-cyan-300/90">{index}</span>
+        <span className="font-mono-ui text-xs tracking-[0.3em] text-cyan-200">{index}</span>
         <span className="pf-hairline w-16" />
-        <span className="font-mono-ui text-[11px] tracking-[0.3em] text-white/50 uppercase">{eyebrow}</span>
+        <span className="font-mono-ui text-xs tracking-[0.3em] text-white/65 uppercase">{eyebrow}</span>
       </motion.div>
 
       <WordReveal
         as="h2"
         text={title}
-        className="font-display mt-4 text-3xl font-semibold text-white sm:text-4xl md:text-5xl"
+        className="font-display mt-4 text-3xl font-bold text-white sm:text-4xl md:text-5xl"
       />
 
       {description && (
@@ -43,7 +43,7 @@ export function SectionHeading({
           viewport={{ once: true, margin: "-10% 0px" }}
           transition={{ duration: 0.55, delay: 0.15 }}
           className={cn(
-            "mt-4 max-w-xl text-sm leading-relaxed text-white/60 sm:text-base",
+            "pf-muted mt-4 max-w-xl text-[15px] leading-relaxed sm:text-base",
             align === "center" && "mx-auto",
           )}
         >

@@ -50,7 +50,7 @@ export function Contact() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="font-mono-ui text-[11px] tracking-[0.3em] text-cyan-300/90 uppercase"
+            className="font-mono-ui text-xs tracking-[0.3em] text-cyan-200 uppercase"
           >
             03 — Say hello
           </motion.p>
@@ -70,7 +70,7 @@ export function Contact() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.12 }}
-            className="mt-5 max-w-md text-sm leading-relaxed text-white/60 sm:text-base"
+            className="pf-muted mt-5 max-w-md text-[15px] leading-relaxed sm:text-lg"
           >
             Have an idea, a project, or an internship opportunity? My inbox is always open — I'll get
             back to you within a day.
@@ -91,7 +91,7 @@ export function Contact() {
                   rel="noopener noreferrer"
                   aria-label={s.label}
                   data-cursor="link"
-                  className="pf-glass flex items-center gap-2.5 rounded-full py-2 pr-4 pl-3 text-xs font-medium text-white/80 transition-all duration-300 hover:border-cyan-300/40 hover:text-cyan-200"
+                  className="pf-glass flex items-center gap-2.5 rounded-full py-2 pr-4 pl-3 text-[13px] font-medium text-white/90 transition-all duration-300 hover:border-cyan-300/40 hover:text-cyan-200"
                 >
                   <SocialIcon id={s.id} className="size-4" />
                   {s.label}
@@ -106,7 +106,7 @@ export function Contact() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="font-mono-ui mt-8 text-[11px] tracking-[0.2em] text-white/40"
+            className="font-mono-ui mt-8 text-xs tracking-[0.2em] text-white/65"
           >
             {profile.email} · {profile.location}
           </motion.p>
@@ -187,14 +187,14 @@ function Field({
   placeholder?: string;
 }) {
   const base =
-    "peer w-full rounded-xl border bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-white/25 transition-all duration-300 focus:bg-white/[0.06] focus:outline-none";
+    "peer w-full rounded-xl border bg-white/[0.05] px-4 py-3 text-[15px] text-white placeholder:text-white/40 transition-all duration-300 focus:bg-white/[0.07] focus:outline-none";
   const border = error
     ? "border-rose-400/60 focus:border-rose-300"
     : "border-white/10 focus:border-cyan-300/70 focus:shadow-[0_0_0_3px_rgba(103,232,249,0.12)]";
 
   return (
     <label className="block">
-      <span className="font-mono-ui mb-2 block text-[10px] tracking-[0.25em] text-white/50 uppercase">
+      <span className="font-mono-ui mb-2 block text-[10px] tracking-[0.25em] text-white/65 uppercase">
         {label}
       </span>
       {textarea ? (

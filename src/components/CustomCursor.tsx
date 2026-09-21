@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Custom cursor (desktop, fine pointers only). A dot follows the mouse 1:1
- * while a ring trails with easing. Elements marked `data-cursor="link"` or
- * `data-cursor="view"` expand/tint the ring. Hidden entirely on touch devices
- * and when (pointer: fine) is unsupported or reduced motion is requested.
+ * Custom cursor (desktop, fine pointers only) — event-driven, no RAF loop,
+ * so it keeps working even in environments that throttle requestAnimationFrame
+ * (e.g. sandboxed preview iframes). The dot tracks 1:1 on pointermove; the
+ * ring trails via a CSS transform transition. The native cursor is hidden
+ * only after the custom one is actually active (html.pf-cursor-on).
  */
 export function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
@@ -15,82 +16,71 @@ export function CustomCursor() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!fine || reduced) return;
 
-    const show = (el: HTMLDivElement | null) => {
-      if (el) el.style.display = "block";
-    };
-    show(dotRef.current);
-    show(ringRef.current);
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    if (!dot || !ring) return;
 
-    const pos = { x: -100, y: -100 };
-    const ring = { x: -100, y: -100 };
+    const root = document.documentElement;
+    root.classList.add("pf-cursor-on");
+    dot.style.opacity = "1";
+    ring.style.opacity = "1";
+
     let hovering = "";
     let down = false;
-    let raf = 0;
+
+    const apply = (x: number, y: number) => {
+      const dotScale = down ? 0.7 : 1;
+      const ringScale = (hovering === "view" ? 2.3 : hovering === "link" ? 1.6 : 1) * (down ? 0.85 : 1);
+      dot.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${dotScale})`;
+      ring.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${ringScale})`;
+      ring.style.borderColor =
+        hovering === "view"
+          ? "rgba(167,139,250,.95)"
+          : hovering === "link"
+            ? "rgba(103,232,249,.95)"
+            : "rgba(255,255,255,.65)";
+      ring.style.backgroundColor = hovering === "view" ? "rgba(167,139,250,.1)" : "transparent";
+    };
 
     const onMove = (e: PointerEvent) => {
-      pos.x = e.clientX;
-      pos.y = e.clientY;
       const el = (e.target as HTMLElement | null)?.closest?.(
         "[data-cursor], a, button, [role='button']",
       ) as HTMLElement | null;
       hovering = el?.dataset?.cursor ?? (el ? "link" : "");
+      apply(e.clientX, e.clientY);
     };
-    const onDown = () => (down = true);
-    const onUp = () => (down = false);
-
-    const loop = () => {
-      ring.x += (pos.x - ring.x) * 0.18;
-      ring.y += (pos.y - ring.y) * 0.18;
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%) scale(${down ? 0.7 : 1})`;
-      }
-      if (ringRef.current) {
-        const active = hovering === "view" ? 2.4 : hovering === "link" ? 1.7 : 1;
-        ringRef.current.style.transform = `translate3d(${ring.x}px, ${ring.y}px, 0) translate(-50%, -50%) scale(${down ? active * 0.85 : active})`;
-        ringRef.current.style.borderColor =
-          hovering === "view"
-            ? "rgba(167,139,250,.9)"
-            : hovering === "link"
-              ? "rgba(103,232,249,.9)"
-              : "rgba(255,255,255,.45)";
-        ringRef.current.style.backgroundColor =
-          hovering === "view" ? "rgba(167,139,250,.08)" : "transparent";
-      }
-      raf = requestAnimationFrame(loop);
+    const onDown = () => {
+      down = true;
+    };
+    const onUp = () => {
+      down = false;
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerdown", onDown);
     window.addEventListener("pointerup", onUp);
-    raf = requestAnimationFrame(loop);
     return () => {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
-      cancelAnimationFrame(raf);
+      root.classList.remove("pf-cursor-on");
     };
   }, []);
 
-  // Divs are hidden by default (display:none via ref callback); the effect
-  // unhides them only on fine-pointer devices without reduced motion.
+  // Hidden (opacity 0) until the effect activates — touch devices never see it.
   return (
     <>
-      <style>{`@media (pointer: fine) { html, a, button, [role='button'], input, textarea { cursor: none; } }`}</style>
       <div
-        ref={(el) => {
-          dotRef.current = el;
-          if (el) el.style.display = "none";
-        }}
+        ref={dotRef}
+        style={{ opacity: 0 }}
         aria-hidden="true"
-        className="pf-glow-cyan pointer-events-none fixed top-0 left-0 z-[90] size-1.5 rounded-full bg-cyan-300"
+        className="pf-glow-cyan pointer-events-none fixed top-0 left-0 z-[90] size-2 rounded-full bg-cyan-200 transition-[transform] duration-75 ease-out"
       />
       <div
-        ref={(el) => {
-          ringRef.current = el;
-          if (el) el.style.display = "none";
-        }}
+        ref={ringRef}
+        style={{ opacity: 0 }}
         aria-hidden="true"
-        className="pointer-events-none fixed top-0 left-0 z-[90] size-9 rounded-full border border-white/45 transition-[border-color,background-color] duration-200"
+        className="pointer-events-none fixed top-0 left-0 z-[90] size-10 rounded-full border-2 border-white/65 transition-[transform,border-color,background-color] duration-200 ease-out"
       />
     </>
   );
