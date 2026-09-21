@@ -1,9 +1,9 @@
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, CheckCircle2, Loader2, TriangleAlert } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, TriangleAlert } from "lucide-react";
 import { useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { MagneticButton } from "@/components/MagneticButton";
+import { StatefulButton } from "@/components/StatefulButton";
 import { SocialIcon } from "@/data/social-icons";
 import { socials, profile } from "@/data/portfolio";
 
@@ -21,10 +21,13 @@ export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
   const [serverError, setServerError] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const pendingRef = useRef(false);
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const form = e.currentTarget;
+  /** Shared submission flow — used by the stateful button (click) and Enter key. Throws to make the button's spinner reset on failure. */
+  async function runSubmit(): Promise<void> {
+    const form = formRef.current;
+    if (!form || pendingRef.current) return;
     const data = new FormData(form);
     const name = String(data.get("name") ?? "").trim();
     const email = String(data.get("email") ?? "").trim();
@@ -38,9 +41,10 @@ export function Contact() {
     setErrors(next);
     if (Object.keys(next).length > 0) {
       setStatus("error");
-      return;
+      throw new Error("validation");
     }
 
+    pendingRef.current = true;
     setStatus("loading");
     setServerError(null);
     try {
@@ -51,7 +55,16 @@ export function Contact() {
     } catch (err) {
       setServerError(err instanceof Error ? err.message : "Something went wrong — please email me directly.");
       setStatus("error");
+      throw err;
+    } finally {
+      pendingRef.current = false;
     }
+  }
+
+  // Enter key in the form delegates to the same flow (the button handles clicks itself).
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    void runSubmit().catch(() => {});
   }
 
   return (
@@ -127,6 +140,7 @@ export function Contact() {
 
         {/* Form */}
         <motion.form
+          ref={formRef}
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-8% 0px" }}
@@ -159,17 +173,33 @@ export function Contact() {
           </div>
 
           <div className="mt-7 flex flex-wrap items-center gap-4">
-            <MagneticButton type="submit" disabled={status === "loading"} ariaLabel="Send message">
-              {status === "loading" ? (
-                <>
-                  <Loader2 className="size-3.5 animate-spin" /> Sending
-                </>
-              ) : (
-                "Send message"
-              )}
-            </MagneticButton>
+            <StatefulButton
+              onAction={runSubmit}
+              validate={() => {
+                // Validate without running the async submission: surface field
+                // errors instantly and keep the loader from showing at all.
+                const form = formRef.current;
+                if (!form) return false;
+                const data = new FormData(form);
+                const name = String(data.get("name") ?? "").trim();
+                const email = String(data.get("email") ?? "").trim();
+                const message = String(data.get("message") ?? "").trim();
+                const next: typeof errors = {};
+                if (name.length < 2) next.name = "Please enter your name.";
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = "Please enter a valid email.";
+                if (message.length < 10) next.message = "Message should be at least 10 characters.";
+                setErrors(next);
+                if (Object.keys(next).length > 0) {
+                  setStatus("error");
+                  return false;
+                }
+                return true;
+              }}
+            >
+              Send message
+            </StatefulButton>
 
-            {/* Live region for a11y */}
+            {/* Live region for a11y — the button's checkmark plays alongside this */}
             <p aria-live="polite" className="min-h-5 max-w-[16rem] text-xs leading-snug">
               {status === "success" && (
                 <span className="inline-flex items-center gap-1.5 text-[#b8cf8a]">
