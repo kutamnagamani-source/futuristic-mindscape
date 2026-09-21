@@ -53,8 +53,8 @@ export function MagneticButton({
   const shell = cn(
     "group relative inline-flex items-center justify-center overflow-hidden rounded-full px-7 py-3 font-mono-ui text-xs font-medium tracking-[0.22em] uppercase transition-all duration-300",
     variant === "primary"
-      ? "border border-cyan-300/60 bg-cyan-400/10 text-cyan-100 pf-glow-cyan hover:bg-cyan-400/20"
-      : "border border-white/15 bg-white/[0.03] text-white/85 hover:border-white/35 hover:bg-white/[0.08]",
+      ? "border border-amber-300/70 bg-amber-400/10 text-amber-100 pf-glow-amber hover:bg-amber-400/20"
+      : "border border-white/15 bg-white/[0.04] text-white/90 hover:border-amber-200/40 hover:bg-white/[0.08] hover:text-white",
   );
 
   const inner = (
@@ -64,7 +64,7 @@ export function MagneticButton({
         <span className="absolute inset-0 rounded-full border border-white/25" />
       </span>
       {/* Rippling glow */}
-      <span className="pointer-events-none absolute inset-0 -z-0 scale-75 rounded-full bg-gradient-to-r from-cyan-400/20 to-violet-400/20 opacity-0 blur-md transition-all duration-500 group-hover:scale-100 group-hover:opacity-100" />
+      <span className="pointer-events-none absolute inset-0 -z-0 scale-75 rounded-full bg-gradient-to-r from-amber-400/25 to-orange-400/20 opacity-0 blur-md transition-all duration-500 group-hover:scale-100 group-hover:opacity-100" />
       <motion.span style={{ x: sx, y: sy }} className="relative z-10 inline-flex items-center gap-2">
         {children}
       </motion.span>

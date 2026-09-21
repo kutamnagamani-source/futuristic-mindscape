@@ -61,31 +61,31 @@ export const skillGroups: SkillGroup[] = [
   {
     id: "ai-ml",
     label: "AI / ML",
-    accent: "#22d3ee",
+    accent: "#f5b944", // amber
     skills: ["PyTorch", "TensorFlow", "Scikit-learn", "Hugging Face", "LangChain", "OpenAI API"],
   },
   {
     id: "frontend",
     label: "Frontend",
-    accent: "#a78bfa",
+    accent: "#e0c388", // champagne
     skills: ["React", "TypeScript", "Next.js", "Tailwind", "Three.js", "Framer Motion"],
   },
   {
     id: "backend",
     label: "Backend",
-    accent: "#6ee7b7",
+    accent: "#d98e5f", // copper
     skills: ["Python", "FastAPI", "Node.js", "Express", "REST APIs", "WebSockets"],
   },
   {
     id: "data",
     label: "Data",
-    accent: "#7dd3fc",
+    accent: "#a8bd7a", // olive
     skills: ["Pandas", "NumPy", "SQL", "MongoDB", "PostgreSQL", "Pinecone"],
   },
   {
     id: "tools",
     label: "Tools",
-    accent: "#fbbf24",
+    accent: "#c98a9e", // muted rose
     skills: ["Git", "GitHub", "Docker", "Linux", "Figma", "Jupyter"],
   },
 ];

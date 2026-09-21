@@ -7,8 +7,8 @@ export function Footer() {
     <footer className="pointer-events-auto relative border-t border-white/5 px-6 py-14">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-10">
         <div className="pf-pulse-soft relative grid size-12 place-items-center">
-          <span className="absolute inset-0 rounded-2xl border border-cyan-300/30 bg-cyan-400/5" />
-          <span className="font-display text-sm font-bold text-cyan-200">{profile.initials}</span>
+          <span className="absolute inset-0 rounded-2xl border border-amber-300/35 bg-amber-400/8" />
+          <span className="font-display text-sm font-bold text-amber-200">{profile.initials}</span>
         </div>
 
         <p className="font-mono-ui text-center text-[11px] tracking-[0.35em] text-white/60 uppercase">
@@ -27,7 +27,7 @@ export function Footer() {
                 <a
                   href={href}
                   data-cursor="link"
-                  className="text-xs tracking-[0.18em] text-white/75 uppercase transition-colors hover:text-cyan-200"
+                  className="text-xs tracking-[0.18em] text-white/80 uppercase transition-colors hover:text-amber-200"
                 >
                   {label}
                 </a>
@@ -38,15 +38,14 @@ export function Footer() {
 
         <ul className="flex gap-3">
           {socials.map((s) => (
-            <li key={s.id}>
-              <a
-                href={s.url}
-                target={s.id === "email" ? undefined : "_blank"}
-                rel="noopener noreferrer"
-                aria-label={s.label}
-                data-cursor="link"
-                className="grid size-10 place-items-center rounded-full border border-white/10 bg-white/[0.03] text-white/60 transition-all duration-300 hover:border-cyan-300/40 hover:text-cyan-200"
-              >
+            <li key={s.id}>                <a
+                  href={s.url}
+                  target={s.id === "email" ? undefined : "_blank"}
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  data-cursor="link"
+                  className="grid size-10 place-items-center rounded-full border border-white/12 bg-white/[0.04] text-white/70 transition-all duration-300 hover:border-amber-300/50 hover:text-amber-200 hover:bg-amber-400/10"
+                >
                 <SocialIcon id={s.id} className="size-4" />
               </a>
             </li>

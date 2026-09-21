@@ -38,7 +38,7 @@ export function Shards({ count }: { count: number }) {
             : [0.45 + rng() * 0.7, 0.45 + rng() * 0.7, 0.9 + rng() * 1.6],
         rot: [rng() * Math.PI, rng() * Math.PI, rng() * Math.PI],
         speed: 0.05 + rng() * 0.12,
-        color: rng() > 0.72 ? "#a78bfa" : rng() > 0.4 ? "#22d3ee" : "#334155",
+        color: rng() > 0.72 ? "#d98e5f" : rng() > 0.4 ? "#f5b944" : "#3a352c",
         kind,
       });
     }
@@ -74,9 +74,9 @@ export function Shards({ count }: { count: number }) {
             roughness={0.25}
             metalness={0.85}
             transparent
-            opacity={s.color === "#334155" ? 0.5 : 0.85}
+            opacity={s.color === "#3a352c" ? 0.5 : 0.85}
             emissive={s.color}
-            emissiveIntensity={s.color === "#334155" ? 0.02 : 0.08}
+            emissiveIntensity={s.color === "#3a352c" ? 0.02 : 0.08}
           />
         </mesh>
       ))}

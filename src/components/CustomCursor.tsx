@@ -35,11 +35,11 @@ export function CustomCursor() {
       ring.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${ringScale})`;
       ring.style.borderColor =
         hovering === "view"
-          ? "rgba(167,139,250,.95)"
+          ? "rgba(217,142,95,.95)"
           : hovering === "link"
-            ? "rgba(103,232,249,.95)"
-            : "rgba(255,255,255,.65)";
-      ring.style.backgroundColor = hovering === "view" ? "rgba(167,139,250,.1)" : "transparent";
+            ? "rgba(245,185,68,.95)"
+            : "rgba(255,246,228,.7)";
+      ring.style.backgroundColor = hovering === "view" ? "rgba(217,142,95,.12)" : "transparent";
     };
 
     const onMove = (e: PointerEvent) => {
@@ -74,7 +74,7 @@ export function CustomCursor() {
         ref={dotRef}
         style={{ opacity: 0 }}
         aria-hidden="true"
-        className="pf-glow-cyan pointer-events-none fixed top-0 left-0 z-[90] size-2 rounded-full bg-cyan-200 transition-[transform] duration-75 ease-out"
+        className="pf-glow-amber pointer-events-none fixed top-0 left-0 z-[90] size-2 rounded-full bg-amber-200 transition-[transform] duration-75 ease-out"
       />
       <div
         ref={ringRef}

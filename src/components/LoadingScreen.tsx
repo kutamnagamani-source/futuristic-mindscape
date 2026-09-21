@@ -70,7 +70,7 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
             </div>
             {/* Scan line sweeping the monogram */}
             <motion.div
-              className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-cyan-300 to-transparent"
+              className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent"
               animate={{ top: ["10%", "90%", "10%"] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
             />
@@ -79,7 +79,7 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
           {/* Progress bar */}
           <div className="mt-10 h-px w-44 overflow-hidden bg-white/10">
             <div
-              className="h-full bg-gradient-to-r from-cyan-400 to-violet-400 transition-[width] duration-100"
+              className="h-full bg-gradient-to-r from-amber-300 to-orange-400 transition-[width] duration-100"
               style={{ width: `${Math.round(progress * 100)}%` }}
             />
           </div>

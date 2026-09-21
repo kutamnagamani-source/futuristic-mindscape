@@ -14,18 +14,18 @@ export function Hero() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="font-mono-ui flex items-center gap-3 text-xs tracking-[0.4em] text-cyan-200 uppercase"
+        className="font-mono-ui flex items-center gap-3 text-xs tracking-[0.4em] text-amber-200 uppercase"
       >
-        <span className="inline-block h-px w-8 bg-cyan-300/50" />
+        <span className="inline-block h-px w-8 bg-amber-300/60" />
         Hello, I'm
-        <span className="inline-block h-px w-8 bg-cyan-300/50" />
+        <span className="inline-block h-px w-8 bg-amber-300/60" />
       </motion.p>
 
       <motion.h1
         initial={{ opacity: 0, y: 24, filter: "blur(10px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ delay: 0.5, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="font-display mt-5 bg-gradient-to-b from-white via-white to-white/80 bg-clip-text text-5xl font-bold tracking-tight text-transparent drop-shadow-[0_0_30px_rgba(103,232,249,0.25)] sm:text-7xl lg:text-8xl"
+        className="font-display mt-5 bg-gradient-to-b from-white via-[#fff6e4] to-[#e8d5ae] bg-clip-text text-5xl font-bold tracking-tight text-transparent drop-shadow-[0_0_34px_rgba(245,185,68,0.28)] sm:text-7xl lg:text-8xl"
       >
         {profile.name}
       </motion.h1>
@@ -69,7 +69,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.6, duration: 0.8 }}
-        className="font-mono-ui pointer-events-auto absolute bottom-7 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-[11px] tracking-[0.35em] text-white/70 uppercase transition-colors hover:text-cyan-200"
+        className="font-mono-ui pointer-events-auto absolute bottom-7 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-[11px] tracking-[0.35em] text-white/75 uppercase transition-colors hover:text-amber-200"
         aria-label="Scroll to about section"
       >
         Scroll to explore

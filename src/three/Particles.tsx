@@ -55,7 +55,7 @@ export function Particles({ count, reduced = false }: { count: number; reduced?:
       </bufferGeometry>
       <pointsMaterial
         size={0.045}
-        color="#9bd8ff"
+        color="#ffd9a0"
         transparent
         opacity={0.55}
         sizeAttenuation

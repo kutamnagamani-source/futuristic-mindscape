@@ -68,10 +68,10 @@ export function Navbar() {
         >
           <a href="#home" className="font-display flex items-center gap-2.5" data-cursor="link">
             <span className="relative flex size-2.5">
-              <span className="pf-pulse-soft absolute inline-flex size-full rounded-full bg-cyan-400/60" />
-              <span className="relative inline-flex size-2.5 rounded-full bg-cyan-300" />
+              <span className="pf-pulse-soft absolute inline-flex size-full rounded-full bg-amber-400/60" />
+              <span className="relative inline-flex size-2.5 rounded-full bg-amber-300" />
             </span>
-            <span className="text-sm font-semibold tracking-[0.18em] text-white uppercase drop-shadow-[0_0_10px_rgba(103,232,249,0.35)]">
+            <span className="text-sm font-semibold tracking-[0.18em] text-white uppercase drop-shadow-[0_0_10px_rgba(245,185,68,0.35)]">
               {profile.name}
             </span>
           </a>
@@ -90,7 +90,7 @@ export function Navbar() {
                   {active === l.id && (
                     <motion.span
                       layoutId="nav-pill"
-                      className="absolute inset-0 rounded-full border border-cyan-300/30 bg-cyan-400/10"
+                      className="absolute inset-0 rounded-full border border-amber-300/35 bg-amber-400/10"
                       transition={{ type: "spring", stiffness: 350, damping: 30 }}
                     />
                   )}
@@ -134,9 +134,9 @@ export function Navbar() {
                   <a
                     href={`#${l.id}`}
                     onClick={() => setOpen(false)}
-                    className="font-display flex items-baseline gap-4 py-2 text-4xl font-semibold text-white/85 transition-colors hover:text-cyan-300"
+                    className="font-display flex items-baseline gap-4 py-2 text-4xl font-semibold text-white/90 transition-colors hover:text-amber-300"
                   >
-                    <span className="font-mono-ui text-xs text-cyan-300/70">0{i + 1}</span>
+                    <span className="font-mono-ui text-xs text-amber-300/80">0{i + 1}</span>
                     {l.label}
                   </a>
                 </motion.li>

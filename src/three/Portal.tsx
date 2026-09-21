@@ -35,17 +35,17 @@ export function Portal({ position = [0, -0.4, -14.5] as [number, number, number]
       {/* Main halo */}
       <mesh ref={ringA}>
         <torusGeometry args={[2.6, 0.02, 12, 128]} />
-        <meshBasicMaterial color="#67e8f9" transparent opacity={0.85} />
+        <meshBasicMaterial color="#f5b944" transparent opacity={0.85} />
       </mesh>
-      {/* Counter-rotating violet halo */}
+      {/* Counter-rotating copper halo */}
       <mesh ref={ringB} rotation={[0.25, 0.15, 0]}>
         <torusGeometry args={[2.2, 0.012, 12, 128]} />
-        <meshBasicMaterial color="#a78bfa" transparent opacity={0.6} />
+        <meshBasicMaterial color="#d98e5f" transparent opacity={0.6} />
       </mesh>
       {/* Luminous center disc */}
       <mesh ref={disc}>
         <circleGeometry args={[1.9, 48]} />
-        <meshBasicMaterial color="#0ea5b7" transparent opacity={0.15} side={THREE.DoubleSide} depthWrite={false} />
+        <meshBasicMaterial color="#b3742a" transparent opacity={0.15} side={THREE.DoubleSide} depthWrite={false} />
       </mesh>
       {/* Radial spokes */}
       {Array.from({ length: 12 }).map((_, i) => {
@@ -53,7 +53,7 @@ export function Portal({ position = [0, -0.4, -14.5] as [number, number, number]
         return (
           <mesh key={i} rotation={[0, 0, a]} position={[Math.cos(a) * 2.4, Math.sin(a) * 2.4, 0]}>
             <planeGeometry args={[0.55, 0.006]} />
-            <meshBasicMaterial color="#67e8f9" transparent opacity={0.35} />
+            <meshBasicMaterial color="#f5b944" transparent opacity={0.35} />
           </mesh>
         );
       })}

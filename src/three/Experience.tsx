@@ -32,10 +32,10 @@ export default function Experience() {
       >
         <Suspense fallback={null}>
           <CameraRig />
-          {/* Lighting for the metallic shards */}
+          {/* Warm lighting for the metallic shards */}
           <ambientLight intensity={0.5} />
-          <directionalLight position={[6, 8, 4]} intensity={1.4} color="#cfe9ff" />
-          <directionalLight position={[-6, -4, -6]} intensity={0.5} color="#a78bfa" />
+          <directionalLight position={[6, 8, 4]} intensity={1.4} color="#ffe6bf" />
+          <directionalLight position={[-6, -4, -6]} intensity={0.5} color="#d98e5f" />
 
           <Particles count={particleCount} reduced={reduced} />
           <Shards count={shardCount} />

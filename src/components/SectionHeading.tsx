@@ -25,9 +25,9 @@ export function SectionHeading({
         transition={{ duration: 0.5 }}
         className={cn("flex items-center gap-3", align === "center" && "justify-center")}
       >
-        <span className="font-mono-ui text-xs tracking-[0.3em] text-cyan-200">{index}</span>
+        <span className="font-mono-ui text-xs tracking-[0.3em] text-amber-200">{index}</span>
         <span className="pf-hairline w-16" />
-        <span className="font-mono-ui text-xs tracking-[0.3em] text-white/65 uppercase">{eyebrow}</span>
+        <span className="font-mono-ui text-xs tracking-[0.3em] text-white/70 uppercase">{eyebrow}</span>
       </motion.div>
 
       <WordReveal

@@ -50,7 +50,7 @@ export function SkillRings({ isMobile }: { isMobile: boolean }) {
       {/* Faint central nucleus the rings orbit */}
       <mesh ref={center}>
         <icosahedronGeometry args={[0.55, 1]} />
-        <meshBasicMaterial color="#a78bfa" transparent opacity={0.3} wireframe />
+        <meshBasicMaterial color="#e0c388" transparent opacity={0.3} wireframe />
       </mesh>
 
       {active &&

@@ -48,7 +48,7 @@ export function About() {
             {about.interests.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-xs tracking-wide text-white/85 transition-colors duration-300 hover:border-cyan-300/40 hover:text-cyan-200"
+                className="rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-xs tracking-wide text-white/90 transition-colors duration-300 hover:border-amber-300/50 hover:text-amber-100 hover:bg-amber-400/10"
               >
                 {tag}
               </span>
@@ -64,22 +64,22 @@ export function About() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="pf-noise pf-glass relative self-start overflow-hidden rounded-3xl p-6 sm:p-7 [transform-style:preserve-3d]"
         >
-          {/* holographic top edge */}
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
+          {/* luminous top edge */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300/80 to-transparent" />
           <div className="font-mono-ui flex items-center justify-between text-[10px] tracking-[0.25em] text-white/55 uppercase">
             <span>Identity // {profile.initials}-01</span>
-            <span className="pf-pulse-soft text-emerald-300">● online</span>
+            <span className="pf-pulse-soft text-[#b8cf8a]">● online</span>
           </div>
 
           <div className="mt-6 flex items-center gap-4">
-            <div className="relative grid size-16 place-items-center rounded-2xl border border-cyan-300/30 bg-gradient-to-br from-cyan-400/15 to-violet-400/15">
-              <span className="font-display pf-text-glow text-xl font-bold text-cyan-200">
+            <div className="relative grid size-16 place-items-center rounded-2xl border border-amber-300/35 bg-gradient-to-br from-amber-400/15 to-orange-400/10">
+              <span className="font-display pf-text-glow text-xl font-bold text-amber-200">
                 {profile.initials}
               </span>
             </div>
             <div>
               <p className="font-display text-lg font-semibold text-white">{profile.name}</p>
-              <p className="font-mono-ui mt-0.5 text-[10px] tracking-[0.2em] text-cyan-300/80 uppercase">
+              <p className="font-mono-ui mt-0.5 text-[10px] tracking-[0.2em] text-amber-200/90 uppercase">
                 {profile.role}
               </p>
             </div>
@@ -102,7 +102,7 @@ export function About() {
           </dl>
 
           {/* corner glow */}
-          <div className="pointer-events-none absolute -right-16 -bottom-16 size-48 rounded-full bg-violet-500/15 blur-3xl" />
+          <div className="pointer-events-none absolute -right-16 -bottom-16 size-48 rounded-full bg-orange-500/15 blur-3xl" />
         </motion.div>
       </div>
     </section>

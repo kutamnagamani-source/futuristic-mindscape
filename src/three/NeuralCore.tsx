@@ -87,7 +87,7 @@ export function NeuralCore({ position = [0, 0.2, 0] as [number, number, number] 
         <icosahedronGeometry args={[2.35, 1]} />
         <meshBasicMaterial
           ref={shellMat}
-          color="#67e8f9"
+          color="#f5b944"
           wireframe
           transparent
           opacity={0.22}
@@ -98,7 +98,7 @@ export function NeuralCore({ position = [0, 0.2, 0] as [number, number, number] 
       {/* Inner nucleus */}
       <mesh ref={nucleus}>
         <icosahedronGeometry args={[0.72, 2]} />
-        <meshBasicMaterial ref={nucleusMat} color="#a5f3fc" transparent opacity={0.75} />
+        <meshBasicMaterial ref={nucleusMat} color="#ffdf9e" transparent opacity={0.75} />
       </mesh>
 
       {/* Orbiting nodes */}
@@ -111,17 +111,17 @@ export function NeuralCore({ position = [0, 0.2, 0] as [number, number, number] 
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[links, 3]} />
         </bufferGeometry>
-        <lineBasicMaterial color="#22d3ee" transparent opacity={0.12} depthWrite={false} />
+        <lineBasicMaterial color="#f5b944" transparent opacity={0.12} depthWrite={false} />
       </lineSegments>
 
       {/* Data rings */}
       <mesh ref={ring} rotation={[Math.PI / 2.15, 0.3, 0]}>
         <torusGeometry args={[3.05, 0.012, 8, 128]} />
-        <meshBasicMaterial color="#22d3ee" transparent opacity={0.5} />
+        <meshBasicMaterial color="#f5b944" transparent opacity={0.5} />
       </mesh>
       <mesh ref={ring2} rotation={[Math.PI / 1.8, -0.5, 0.4]}>
         <torusGeometry args={[3.45, 0.008, 8, 128]} />
-        <meshBasicMaterial color="#a78bfa" transparent opacity={0.35} />
+        <meshBasicMaterial color="#d98e5f" transparent opacity={0.35} />
       </mesh>
     </group>
   );
@@ -157,7 +157,7 @@ function Node({
   return (
     <mesh ref={ref} position={base}>
       <sphereGeometry args={[0.055, 12, 12]} />
-      <meshBasicMaterial color={index % 3 === 0 ? "#a78bfa" : "#67e8f9"} />
+      <meshBasicMaterial color={index % 3 === 0 ? "#d98e5f" : "#f5b944"} />
     </mesh>
   );
 }

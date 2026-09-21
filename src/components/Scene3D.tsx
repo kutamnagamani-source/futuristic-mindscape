@@ -35,13 +35,22 @@ class SceneErrorBoundary extends Component<{ children: ReactNode }, { hasError: 
 function useWebGLAvailable() {
   const [ok, setOk] = useState<boolean | null>(null);
   useEffect(() => {
-    try {
-      const c = document.createElement("canvas");
-      const gl = c.getContext("webgl2") ?? c.getContext("webgl");
-      setOk(!!gl);
-    } catch {
-      setOk(false);
-    }
+    // Deferred to a microtask so we never setState synchronously in the
+    // effect body, and so this runs regardless of RAF throttling.
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (cancelled) return;
+      try {
+        const c = document.createElement("canvas");
+        const gl = c.getContext("webgl2") ?? c.getContext("webgl");
+        setOk(!!gl);
+      } catch {
+        setOk(false);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
   return ok;
 }

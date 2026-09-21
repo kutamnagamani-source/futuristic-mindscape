@@ -6,6 +6,7 @@ import { CustomCursor } from "@/components/CustomCursor";
 import { Scene3D } from "@/components/Scene3D";
 import { Hero } from "@/sections/Hero";
 import { About } from "@/sections/About";
+import { TechMarquee } from "@/sections/TechMarquee";
 import { Skills } from "@/sections/Skills";
 import { Contact } from "@/sections/Contact";
 import { Footer } from "@/sections/Footer";
@@ -33,7 +34,7 @@ export default function Landing() {
       {/* Cinematic scroll progress hairline */}
       <motion.div
         style={{ scaleX: progress }}
-        className="pointer-events-none fixed inset-x-0 top-0 z-[60] h-px origin-left bg-gradient-to-r from-cyan-400/80 via-violet-400/80 to-emerald-300/80"
+        className="pointer-events-none fixed inset-x-0 top-0 z-[60] h-px origin-left bg-gradient-to-r from-amber-300 via-orange-300 to-rose-300"
         aria-hidden="true"
       />
 
@@ -43,10 +44,10 @@ export default function Landing() {
       {/* Vignette above the canvas, below content */}
       <div className="pointer-events-none fixed inset-0 z-[1] bg-[radial-gradient(ellipse_90%_70%_at_50%_40%,transparent_55%,rgba(5,5,7,0.75)_100%)]" aria-hidden="true" />
 
-      {/* Ambient aurora glows — depth and color behind everything */}
+      {/* Ambient ember glows — depth and warmth behind everything */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
-        <div className="pf-aurora-a absolute -top-[20%] left-[8%] h-[55vh] w-[55vw] rounded-full bg-cyan-500/[0.07] blur-[110px]" />
-        <div className="pf-aurora-b absolute right-[5%] bottom-[-15%] h-[50vh] w-[50vw] rounded-full bg-violet-600/[0.07] blur-[120px]" />
+        <div className="pf-aurora-a absolute -top-[20%] left-[8%] h-[55vh] w-[55vw] rounded-full bg-amber-500/[0.08] blur-[110px]" />
+        <div className="pf-aurora-b absolute right-[5%] bottom-[-15%] h-[50vh] w-[50vw] rounded-full bg-orange-600/[0.07] blur-[120px]" />
       </div>
 
       {/* Content mounts after the loader so entrance animations play post-reveal */}
@@ -65,6 +66,7 @@ export default function Landing() {
             <main className="pointer-events-none">
               <Hero />
               <About />
+              <TechMarquee />
               <Skills />
               <Contact />
             </main>

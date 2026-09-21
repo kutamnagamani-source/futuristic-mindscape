@@ -27,7 +27,7 @@ export function Skills() {
           >
             {/* hover glow tinted by the category accent */}
             <div
-              className="pointer-events-none absolute -top-20 -right-20 size-44 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-25"
+              className="pointer-events-none absolute -top-20 -right-20 size-44 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-30"
               style={{ background: g.accent }}
             />
 
@@ -42,7 +42,7 @@ export function Skills() {
               {g.skills.map((s) => (
                 <li
                   key={s}
-                  className="rounded-lg border border-white/15 bg-white/[0.07] px-2.5 py-1.5 text-xs text-white/90 transition-all duration-300 group-hover:border-white/30 group-hover:text-white"
+                  className="rounded-lg border border-white/15 bg-white/[0.07] px-2.5 py-1.5 text-xs text-white/90 transition-all duration-300 group-hover:border-white/30 group-hover:bg-white/[0.1] group-hover:text-white"
                 >
                   {s}
                 </li>
