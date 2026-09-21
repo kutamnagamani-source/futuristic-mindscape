@@ -72,37 +72,42 @@ export const ask = action({
   },
 });
 
-/** Gemini via REST API (no SDK needed). Returns null on any failure. */
+/** Gemini via REST API (no SDK needed). Tries models in order; returns null on failure. */
+const GEMINI_MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-2.0-flash"];
+
 async function askGemini(q: string): Promise<string | null> {
-  try {
-    const res = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-goog-api-key": process.env.GOOGLE_API_KEY ?? "",
+  for (const model of GEMINI_MODELS) {
+    try {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": process.env.GOOGLE_API_KEY ?? "",
+          },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+            contents: [{ role: "user", parts: [{ text: q }] }],
+            generationConfig: { temperature: 0.6, maxOutputTokens: 250 },
+          }),
+          signal: AbortSignal.timeout(20_000),
         },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents: [{ role: "user", parts: [{ text: q }] }],
-          generationConfig: { temperature: 0.6, maxOutputTokens: 250 },
-        }),
-        signal: AbortSignal.timeout(20_000),
-      },
-    );
-    if (!res.ok) {
-      console.warn("Gemini error:", res.status, (await res.text()).slice(0, 300));
-      return null;
+      );
+      if (!res.ok) {
+        console.warn(`Gemini ${model} error:`, res.status, (await res.text()).slice(0, 200));
+        continue; // try the next model
+      }
+      const data = (await res.json()) as {
+        candidates?: { content?: { parts?: { text?: string }[] } }[];
+      };
+      const answer = data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("").trim();
+      if (answer) return answer;
+    } catch (err) {
+      console.warn(`Gemini ${model} call failed:`, err);
     }
-    const data = (await res.json()) as {
-      candidates?: { content?: { parts?: { text?: string }[] } }[];
-    };
-    return data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("").trim() || null;
-  } catch (err) {
-    console.warn("Gemini call failed:", err);
-    return null;
   }
+  return null;
 }
 
 /** OpenAI via official SDK. Returns null on any failure. */
