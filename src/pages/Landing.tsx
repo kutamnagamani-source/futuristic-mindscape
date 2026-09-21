@@ -10,6 +10,7 @@ import { TechMarquee } from "@/sections/TechMarquee";
 import { Skills } from "@/sections/Skills";
 import { Contact } from "@/sections/Contact";
 import { Footer } from "@/sections/Footer";
+import { ChatWidget } from "@/components/ChatWidget";
 import { bindGlobalListeners, measureZones } from "@/lib/pointer";
 
 
@@ -75,6 +76,9 @@ export default function Landing() {
           </motion.div>
         </>
       )}
+
+      {/* Vijay Bot — floating portfolio assistant */}
+      <ChatWidget />
     </>
   );
 }

@@ -43,6 +43,13 @@ const schema = defineSchema(
       key: v.string(), // "email::name" for rate limiting
       createdAt: v.number(),
     }).index("by_key_and_time", ["key", "createdAt"]),
+
+    // Portfolio chatbot — conversation log for analytics/abuse monitoring.
+    chats: defineTable({
+      question: v.string(),
+      answer: v.string(),
+      createdAt: v.number(),
+    }).index("by_time", ["createdAt"]),
   },
   {
     schemaValidation: false,
