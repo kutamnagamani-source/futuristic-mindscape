@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight, CheckCircle2, Loader2, TriangleAlert } from "lucide-react";
+import { useAction } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { MagneticButton } from "@/components/MagneticButton";
 import { SocialIcon } from "@/data/social-icons";
 import { socials, profile } from "@/data/portfolio";
@@ -8,13 +10,17 @@ import { socials, profile } from "@/data/portfolio";
 type Status = "idle" | "loading" | "success" | "error";
 
 /**
- * Contact: immersive form over the portal zone of the 3D world.
- * v1 validates and simulates send locally; wire `handleSubmit` to a Convex
- * action or serverless endpoint later without touching the UI.
+ * Contact: validated form that really delivers.
+ * - Client-side validation for instant feedback
+ * - Submits to the Convex `contact.submit` action (stores in DB + emails via
+ *   Resend when RESEND_API_KEY is configured in the Keys tab)
+ * - Graceful failures: server errors surface in the UI; nothing is lost
  */
 export function Contact() {
+  const submit = useAction(api.contact.submit);
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
+  const [serverError, setServerError] = useState<string | null>(null);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -24,6 +30,7 @@ export function Contact() {
     const email = String(data.get("email") ?? "").trim();
     const message = String(data.get("message") ?? "").trim();
 
+    // Instant client-side validation
     const next: typeof errors = {};
     if (name.length < 2) next.name = "Please enter your name.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = "Please enter a valid email.";
@@ -35,10 +42,16 @@ export function Contact() {
     }
 
     setStatus("loading");
-    // PLACEHOLDER: replace with a real API call (Convex action / serverless).
-    await new Promise((r) => setTimeout(r, 1200));
-    setStatus("success");
-    form.reset();
+    setServerError(null);
+    try {
+      await submit({ name, email, message });
+      setStatus("success");
+      form.reset();
+      setTimeout(() => setStatus("idle"), 6000);
+    } catch (err) {
+      setServerError(err instanceof Error ? err.message : "Something went wrong — please email me directly.");
+      setStatus("error");
+    }
   }
 
   return (
@@ -72,8 +85,8 @@ export function Contact() {
             transition={{ duration: 0.6, delay: 0.12 }}
             className="pf-muted mt-5 max-w-md text-[15px] leading-relaxed sm:text-lg"
           >
-            Have an idea, a project, or an internship opportunity? My inbox is always open — I'll get
-            back to you within a day.
+            Have an idea, a project, or an opportunity? Send a message — it lands directly in my
+            inbox, and I'll get back to you within a day.
           </motion.p>
 
           <motion.ul
@@ -125,17 +138,24 @@ export function Contact() {
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300/70 to-transparent" />
 
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Name" name="name" error={errors.name} placeholder="Ada Lovelace" />
+            <Field label="Name" name="name" error={errors.name} placeholder="Your name" autoComplete="name" />
             <Field
               label="Email"
               name="email"
               type="email"
               error={errors.email}
               placeholder="you@example.com"
+              autoComplete="email"
             />
           </div>
           <div className="mt-5">
-            <Field label="Message" name="message" textarea error={errors.message} placeholder="Tell me about your idea…" />
+            <Field
+              label="Message"
+              name="message"
+              textarea
+              error={errors.message}
+              placeholder="Tell me about your idea…"
+            />
           </div>
 
           <div className="mt-7 flex flex-wrap items-center gap-4">
@@ -150,15 +170,17 @@ export function Contact() {
             </MagneticButton>
 
             {/* Live region for a11y */}
-            <p aria-live="polite" className="min-h-5 text-xs">
+            <p aria-live="polite" className="min-h-5 max-w-[16rem] text-xs leading-snug">
               {status === "success" && (
                 <span className="inline-flex items-center gap-1.5 text-[#b8cf8a]">
-                  <CheckCircle2 className="size-3.5" /> Message sent — thank you!
+                  <CheckCircle2 className="size-3.5 shrink-0" /> Message sent — it's in my inbox, I'll
+                  reply soon!
                 </span>
               )}
-              {status === "error" && Object.keys(errors).length > 0 && (
-                <span className="inline-flex items-center gap-1.5 text-rose-300">
-                  <TriangleAlert className="size-3.5" /> Please fix the highlighted fields.
+              {status === "error" && (Object.keys(errors).length > 0 || serverError) && (
+                <span className="inline-flex items-start gap-1.5 text-rose-300">
+                  <TriangleAlert className="mt-0.5 size-3.5 shrink-0" />
+                  {serverError ?? "Please fix the highlighted fields."}
                 </span>
               )}
             </p>
@@ -178,6 +200,7 @@ function Field({
   textarea,
   error,
   placeholder,
+  autoComplete,
 }: {
   label: string;
   name: string;
@@ -185,6 +208,7 @@ function Field({
   textarea?: boolean;
   error?: string;
   placeholder?: string;
+  autoComplete?: string;
 }) {
   const base =
     "peer w-full rounded-xl border bg-white/[0.05] px-4 py-3 text-[15px] text-white placeholder:text-white/40 transition-all duration-300 focus:bg-white/[0.07] focus:outline-none";
@@ -198,9 +222,22 @@ function Field({
         {label}
       </span>
       {textarea ? (
-        <textarea name={name} rows={5} placeholder={placeholder} aria-invalid={!!error} className={`${base} ${border} resize-none`} />
+        <textarea
+          name={name}
+          rows={5}
+          placeholder={placeholder}
+          aria-invalid={!!error}
+          className={`${base} ${border} resize-none`}
+        />
       ) : (
-        <input name={name} type={type} placeholder={placeholder} aria-invalid={!!error} className={`${base} ${border}`} />
+        <input
+          name={name}
+          type={type}
+          placeholder={placeholder}
+          autoComplete={autoComplete}
+          aria-invalid={!!error}
+          className={`${base} ${border}`}
+        />
       )}
       {error && <span className="mt-1.5 block text-[11px] text-rose-300">{error}</span>}
     </label>

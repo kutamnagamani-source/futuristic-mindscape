@@ -34,10 +34,15 @@ const schema = defineSchema(
 
     // add other tables here
 
-    // tableName: defineTable({
-    //   ...
-    //   // table fields
-    // }).index("by_field", ["field"])
+    // Contact form submissions (public action writes here; query from the
+    // Convex dashboard to read messages).
+    messages: defineTable({
+      name: v.string(),
+      email: v.string(),
+      message: v.string(),
+      key: v.string(), // "email::name" for rate limiting
+      createdAt: v.number(),
+    }).index("by_key_and_time", ["key", "createdAt"]),
   },
   {
     schemaValidation: false,
