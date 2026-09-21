@@ -289,6 +289,18 @@
       opacity: 0;
     }
   }
+  /* Chat mascot orbit ring + satellite (GPU-friendly rotation) */
+  .pf-orbit-spin {
+    animation: pf-orbit 7s linear infinite;
+  }
+  @keyframes pf-orbit {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
   /* Ambient ember orbs — very slow drift, GPU-friendly transforms only */
   @keyframes pf-drift-a {
     0%,
