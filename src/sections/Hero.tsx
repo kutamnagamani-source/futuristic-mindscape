@@ -25,7 +25,7 @@ export function Hero() {
         initial={{ opacity: 0, y: 24, filter: "blur(10px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ delay: 0.5, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="font-display mt-5 bg-gradient-to-b from-white via-[#fff6e4] to-[#e8d5ae] bg-clip-text text-5xl font-bold tracking-tight text-transparent drop-shadow-[0_0_34px_rgba(245,185,68,0.28)] sm:text-7xl lg:text-8xl"
+        className="font-display mt-5 bg-gradient-to-b from-white via-[#fff6e4] to-[#e8d5ae] bg-clip-text text-4xl font-bold tracking-tight text-transparent drop-shadow-[0_0_34px_rgba(245,185,68,0.28)] sm:text-6xl lg:text-8xl"
       >
         {profile.name}
       </motion.h1>

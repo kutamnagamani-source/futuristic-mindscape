@@ -67,11 +67,11 @@ export function Navbar() {
           )}
         >
           <a href="#home" className="font-display flex items-center gap-2.5" data-cursor="link">
-            <span className="relative flex size-2.5">
+            <span className="relative flex size-2.5 shrink-0">
               <span className="pf-pulse-soft absolute inline-flex size-full rounded-full bg-amber-400/60" />
               <span className="relative inline-flex size-2.5 rounded-full bg-amber-300" />
             </span>
-            <span className="text-sm font-semibold tracking-[0.18em] text-white uppercase drop-shadow-[0_0_10px_rgba(245,185,68,0.35)]">
+            <span className="truncate text-sm font-semibold tracking-[0.14em] text-white uppercase drop-shadow-[0_0_10px_rgba(245,185,68,0.35)]">
               {profile.name}
             </span>
           </a>
